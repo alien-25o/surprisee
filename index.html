@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Just For You ✨</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ffd6e8, #fff1f7);
+  overflow-x: hidden;
+  transition: background 1s ease;
+}
+
+/* Pages */
+.page {
+  min-height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.page.active {
+  display: flex;
+  animation: fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card */
+.card {
+  background: white;
+  max-width: 520px;
+  padding: 35px;
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+/* Text */
+h1 {
+  color: #ff5c8a;
+  font-size: 34px;
+}
+
+p {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* Animated heart */
+.big-heart {
+  font-size: 50px;
+  animation: pulse 1.5s infinite;
+  margin: 20px 0;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+/* Buttons */
+button {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 30px;
+  background: #ff5c8a;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(255,92,138,0.5);
+}
+
+button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(255,92,138,0.7);
+}
+
+/* Floating sparkles */
+.sparkle {
+  position: fixed;
+  font-size: 18px;
+  animation: floatUp 5s linear forwards;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); opacity: 0; }
+  to { transform: translateY(-10vh); opacity: 1; }
+}
+
+/* Compliment text */
+#compliment {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #444;
+  min-height: 50px;
+  animation: fadeIn 0.8s ease;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <div class="card">
+    <h1>Hello 🌸</h1>
+    <div class="big-heart">💖</div>
+    <p>This page exists just to make you feel a little lighter.</p>
+    <button onclick="goToPage(2)">Continue ✨</button>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <div class="card">
+    <h1>Take a Breath 🌷</h1>
+    <p>
+      You don’t need to be perfect.  
+      Just being you is already enough.
+    </p>
+    <button onclick="goToPage(3)">Smile Button 😊</button>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <div class="card">
+    <h1>Click & Smile 😊</h1>
+    <div class="big-heart">✨</div>
+
+    <button id="smileBtn" onclick="makeSmile()">Click Me</button>
+    <div id="compliment"></div>
+
+    <button onclick="goToPage(4)">One Last Thing 💝</button>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+  <div class="card">
+    <h1>You Matter 💖</h1>
+    <p>
+      Even on days when you doubt yourself,  
+      remember — you are valued, noticed, and appreciated.
+    </p>
+    <div class="big-heart">🌈</div>
+    <button onclick="goToPage(1)">Start Again 🔁</button>
+  </div>
+</div>
+
+<script>
+let smileCount = 0;
+
+const compliments = [
+  "Your smile suits you perfectly 😊",
+  "You bring good energy without trying ✨",
+  "You’re stronger than you think 💪",
+  "The world feels better with you in it 🌍",
+  "You deserve all the good things 💖"
+];
+
+const backgrounds = [
+  "linear-gradient(135deg, #ffd6e8, #fff1f7)",
+  "linear-gradient(135deg, #d4fcff, #fbefff)",
+  "linear-gradient(135deg, #fff1c1, #ffe4e1)",
+  "linear-gradient(135deg, #e0c3fc, #f9f9f9)"
+];
+
+function goToPage(num) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + num).classList.add('active');
+}
+
+function makeSmile() {
+  document.getElementById("compliment").innerText =
+    compliments[smileCount % compliments.length];
+
+  document.body.style.background =
+    backgrounds[smileCount % backgrounds.length];
+
+  createSparkles();
+
+  // 🔹 change button name after first click
+  if (smileCount === 0) {
+    document.getElementById("smileBtn").innerText = "One More Time 😊";
+  }
+
+  smileCount++;
+}
+
+function createSparkles() {
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.innerText = ["✨","💖","🌸","😊"][Math.floor(Math.random()*4)];
+    s.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 5000);
+  }
+}
+</script>
+
+</body>
+</html>

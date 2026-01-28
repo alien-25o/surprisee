@@ -15,66 +15,82 @@
 
 body{
   min-height:100vh;
-  background:linear-gradient(135deg,#cfd9ff,#fbeaff);
+  background:linear-gradient(-45deg,#cfd9ff,#fbeaff,#ffd6e8,#e0c3fc);
+  background-size:400% 400%;
+  animation:bgMove 10s ease infinite;
   display:flex;
   align-items:center;
   justify-content:center;
+  overflow:hidden;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
 }
 
 .card{
   background:#fff;
   width:90%;
   max-width:380px;
-  padding:30px;
+  padding:32px;
   border-radius:25px;
   text-align:center;
-  box-shadow:0 15px 35px rgba(0,0,0,0.15);
-  animation:fade 1s ease;
+  box-shadow:0 20px 45px rgba(0,0,0,0.18);
+  animation:fade 1s ease, pulse 3s infinite;
 }
 
 @keyframes fade{
-  from{opacity:0; transform:translateY(20px);}
+  from{opacity:0; transform:translateY(30px);}
   to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.02);}
 }
 
 h1{
   color:#5b6cff;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 p{
   color:#444;
   font-size:16px;
-  line-height:1.6;
-  margin-bottom:22px;
+  line-height:1.7;
+  min-height:80px;
 }
 
 button{
   background:#5b6cff;
   color:white;
   border:none;
-  padding:12px 24px;
+  padding:12px 26px;
   border-radius:30px;
   font-size:16px;
   cursor:pointer;
   transition:0.3s;
+  margin-top:20px;
 }
 
 button:hover{
   background:#4455ff;
-  transform:scale(1.05);
+  transform:scale(1.08);
 }
 
 .emoji{
   position:fixed;
-  bottom:0;
-  font-size:22px;
-  animation:floatUp 4s linear forwards;
+  bottom:-20px;
+  font-size:24px;
+  animation:floatUp 5s linear forwards;
+  pointer-events:none;
 }
 
 @keyframes floatUp{
-  0%{transform:translateY(0);opacity:1;}
-  100%{transform:translateY(-100vh);opacity:0;}
+  0%{transform:translateY(0) scale(0.8);opacity:1;}
+  100%{transform:translateY(-110vh) scale(1.4);opacity:0;}
 }
 </style>
 </head>
@@ -84,46 +100,52 @@ button:hover{
 <div class="card">
   <h1>Hey… 🌙</h1>
 
-  <p id="msg">
-Sorry 😔 agar aapko kl ka behaviour bura lga ho to...  </p>
+  <p id="msg"></p>
 
   <button onclick="next()">Tap here 🤍</button>
 </div>
 
 <script>
 let i = 0;
+let texts = [
+  "Sorry 😔 agar aapko kal ka behaviour bura laga ho to…",
+  "Tumhe bura feel karwana mera intention nahi tha 🌸\n\nI’m really sorry 🤍",
+  "You're special even if u hate me 🥰\n\nBas ek baar smile kar do 😊"
+];
+
+function typeText(text){
+  const msg = document.getElementById("msg");
+  msg.innerHTML = "";
+  let index = 0;
+
+  let typing = setInterval(()=>{
+    msg.innerHTML += text.charAt(index);
+    index++;
+    if(index === text.length) clearInterval(typing);
+  },40);
+}
 
 function next(){
-  const msg = document.getElementById("msg");
-
-  if(i===0){
-    msg.innerHTML =
-    "Tumhe bura feel karwana mera intention nahi tha 🌸<br><br>" +
-    "Uske liye… <b>I’m really sorry.</b>";
-    floatEmoji("🌸");
+  if(i < texts.length){
+    typeText(texts[i]);
+    floatEmoji(i===0?"💫":i===1?"🌸":"💖");
+    i++;
   }
-
-  if(i===1){
-    msg.innerHTML =
-    "You're special even if u hate me 🥰<br><br>" +
-    "Bus itna chahta hu tum ek baar smile kar do 😊" +
-    "Plz ek baar 😊";
-    floatEmoji("✨");
-  }
-
-  i++;
 }
 
 function floatEmoji(symbol){
-  for(let j=0;j<10;j++){
+  for(let j=0;j<14;j++){
     let e=document.createElement("div");
     e.className="emoji";
     e.innerHTML=symbol;
     e.style.left=Math.random()*100+"vw";
+    e.style.animationDuration=(3+Math.random()*3)+"s";
     document.body.appendChild(e);
-    setTimeout(()=>e.remove(),4000);
+    setTimeout(()=>e.remove(),6000);
   }
 }
+
+typeText(texts[0]);
 </script>
 
 </body>
